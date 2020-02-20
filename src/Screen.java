@@ -24,13 +24,14 @@ public class Screen extends JPanel {
         new ViewerPlane(new Vector2D(50, 50), 40, new Vector2D(1, 0));
 
         JFrame window = new JFrame("2DRay");
+        output3D = new Screen3D();
 
         window.add(this);
         window.setSize(600, 600);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setVisible(true);
 
-        output3D = new Screen3D();
+
 
 
         window.addMouseMotionListener(new MouseMotionAdapter() {
@@ -58,7 +59,7 @@ public class Screen extends JPanel {
     public void paintComponent(Graphics g) {
         clearScreen(g);
 
-        Point pov = new Point(povX, povY);
+        Vector2D pov = new Vector2D(povX, povY);
         fillCircle(g, pov, 10);
 
         for (Obstacle obstacle : obstacles) {
@@ -70,7 +71,7 @@ public class Screen extends JPanel {
                     g.drawLine(povX, povY, (int) pt.x, (int) pt.y);
                 }
                 if (pt != null) {
-                    output3D.distances[count] = ray.distanceTo(pov, new Point((int) pt.x, (int) pt.y));
+                    output3D.distances[count] = (int) pov.distanceTo(pt);
                 } else {
                     output3D.distances[count] = -1;
                 }
@@ -84,8 +85,8 @@ public class Screen extends JPanel {
         g.drawLine(obstacle.first.x, obstacle.first.y, obstacle.second.x, obstacle.second.y);
     }
 
-    private void fillCircle(Graphics g, Point center, int radius) {
-        g.fillOval(center.x - 5, center.y - 5, radius, radius);
+    private void fillCircle(Graphics g, Vector2D center, int radius) {
+        g.fillOval((int) center.x - 5, (int) center.y - 5, radius, radius);
     }
 
     private void clearScreen(Graphics g) {

@@ -60,7 +60,7 @@ public class Vector2D {
     double distanceTo(Vector2D other) {
         double x = other.x - this.x;
         double y = other.y - this.y;
-        return Math.sqrt(x * x + y * y);
+        return magnitude();
     }
 }
 
