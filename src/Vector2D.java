@@ -1,6 +1,3 @@
-import java.awt.*;
-import java.awt.geom.Point2D;
-
 public class Vector2D {
     double x;
     double y;
@@ -32,14 +29,6 @@ public class Vector2D {
         y /= magnitude;
     }
 
-    public Point tmpConvertToPoint() {
-        return new Point((int) x, (int) y);
-    }
-
-    public Point2D.Double tmpConvertToPoint2DDouble() {
-        return new Point2D.Double(x, y);
-    }
-
     public Vector2D perpendicularClockwise() {
         return new Vector2D(y, -x);
     }
@@ -57,10 +46,15 @@ public class Vector2D {
         y += newOrigin.y;
     }
 
-    double distanceTo(Vector2D other) {
+    public double distanceTo(Vector2D other) {
         double x = other.x - this.x;
         double y = other.y - this.y;
-        return magnitude();
+        return new Vector2D(x, y).magnitude();
+    }
+
+    public void update(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 }
 

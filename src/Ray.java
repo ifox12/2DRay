@@ -1,6 +1,8 @@
 public class Ray {
     Vector2D base;
     Vector2D direction;
+    // TODO save intersection data here and profit from normalized direction vec
+    double distanceToIntersection;
 
     Ray(Vector2D base, Vector2D direction) {
         this.base = base;

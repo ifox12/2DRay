@@ -15,8 +15,6 @@ public class ViewerPlane {
     }
 
     private void populateRays() {
-        Vector2D left = direction.perpendicularCounterclockwise();
-        left.normalize();
         Vector2D right = direction.perpendicularClockwise();
         right.normalize();
 
@@ -28,6 +26,7 @@ public class ViewerPlane {
     }
 
     public void update(Vector2D newBase) {
+        center = newBase;
         for (Ray ray : rays) {
             ray.base = newBase;
         }
