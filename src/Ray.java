@@ -1,13 +1,12 @@
+import java.awt.*;
+
 public class Ray {
     Vector2D base;
     Vector2D direction;
-    // TODO save intersection data here and profit from normalized direction vec
-    int angleToPovDirection;
 
-    Ray(Vector2D base, Vector2D direction, int angleToPovDirection) {
+    Ray(Vector2D base, Vector2D direction) {
         this.base = base;
         this.direction = direction;
-        this.angleToPovDirection = angleToPovDirection;
     }
 
     public Vector2D cast(Obstacle obstacle) {
@@ -30,5 +29,11 @@ public class Ray {
             result = new Vector2D(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
         }
         return result;
+    }
+
+    int distanceTo(Point base, Point intersection) {
+        int x = intersection.x - base.x;
+        int y = intersection.y - base.y;
+        return (int) Math.sqrt(x * x + y * y);
     }
 }
