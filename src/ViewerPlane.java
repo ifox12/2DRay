@@ -26,4 +26,10 @@ public class ViewerPlane {
             rays.add(new Ray(currentOrigin, direction));
         }
     }
+
+    public void update(Vector2D newBase) {
+        for (Ray ray : rays) {
+            ray.base = newBase;
+        }
+    }
 }

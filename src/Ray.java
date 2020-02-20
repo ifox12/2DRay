@@ -1,5 +1,3 @@
-import java.awt.*;
-
 public class Ray {
     Vector2D base;
     Vector2D direction;
@@ -31,9 +29,9 @@ public class Ray {
         return result;
     }
 
-    int distanceTo(Point base, Point intersection) {
-        int x = intersection.x - base.x;
-        int y = intersection.y - base.y;
+    int distanceTo(Vector2D base, Vector2D intersection) {
+        double x = intersection.x - base.x;
+        double y = intersection.y - base.y;
         return (int) Math.sqrt(x * x + y * y);
     }
 }
