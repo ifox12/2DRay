@@ -28,10 +28,4 @@ public class Ray {
         }
         return result;
     }
-
-    int distanceTo(Vector2D base, Vector2D intersection) {
-        double x = intersection.x - base.x;
-        double y = intersection.y - base.y;
-        return (int) Math.sqrt(x * x + y * y);
-    }
 }
