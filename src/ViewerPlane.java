@@ -6,6 +6,7 @@ public class ViewerPlane {
     Vector2D direction;
     ArrayList<Ray> rays = new ArrayList<>();
 
+    // TODO problems with the viewer plane intersecting obstacles (look through)
     ViewerPlane(Vector2D center, int radius, Vector2D direction) {
         this.center = center;
         this.radius = radius;
@@ -27,8 +28,14 @@ public class ViewerPlane {
 
     public void update(Vector2D newBase) {
         center = newBase;
-        for (Ray ray : rays) {
-            ray.base = newBase;
+
+        Vector2D right = direction.perpendicularClockwise();
+        right.normalize();
+
+        for (int i = -radius, count = 0; i < radius; i++, count++) {
+            Vector2D currentOrigin = right.scalarMultiply(i);
+            currentOrigin.move(center);
+            rays.set(count, new Ray(currentOrigin, direction));
         }
     }
 }
