@@ -15,9 +15,9 @@ public class RayCollection {
             lowerBound += 360;
         }
 
-        for (int currentAngle = lowerBound; currentAngle < upperBound; currentAngle++) {
-            rays.add(new Ray(pov, new Vector2D(currentAngle), currentAngle));
-        }
+//        for (int currentAngle = lowerBound; currentAngle < upperBound; currentAngle++) {
+            rays.add(new Ray(pov, new Vector2D(povDirectionInDegree), povDirectionInDegree));
+  //      }
     }
 
 }

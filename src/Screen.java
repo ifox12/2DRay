@@ -40,7 +40,7 @@ public class Screen extends JPanel {
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setVisible(true);
 
-        window.addMouseMotionListener(new MouseMotionAdapter() {
+        addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
@@ -104,6 +104,7 @@ public class Screen extends JPanel {
         g.drawString("mouse: (" + mouseX + "," + mouseY + ")", 10, 75);
         subtract.normalize();
         g.drawString("direction vector: (" + subtract.x + "," + subtract.y + ")", 10, 90);
+        fillCircle(g, new Vector2D(mouseX, mouseY), 10);
 
         int count = 0;
         for (Ray ray : rays.rays) {
