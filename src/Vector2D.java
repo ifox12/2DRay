@@ -1,6 +1,3 @@
-import java.awt.*;
-import java.awt.geom.Point2D;
-
 public class Vector2D {
     double x;
     double y;
@@ -25,6 +22,7 @@ public class Vector2D {
         return x * x + y * y;
     }
 
+    // TODO make this return a new Vector
     public void normalize() {
         double magnitude = magnitude();
         // TODO zero check
@@ -32,35 +30,36 @@ public class Vector2D {
         y /= magnitude;
     }
 
-    public Point tmpConvertToPoint() {
-        return new Point((int) x, (int) y);
-    }
-
-    public Point2D.Double tmpConvertToPoint2DDouble() {
-        return new Point2D.Double(x, y);
-    }
-
-    public Vector2D perpendicularClockwise() {
-        return new Vector2D(y, -x);
-    }
-
-    public Vector2D perpendicularCounterclockwise() {
-        return new Vector2D(-y, x);
-    }
-
-    public Vector2D scalarMultiply(int scalar) {
-        return new Vector2D(x * scalar, y * scalar);
-    }
-
     public void move(Vector2D newOrigin) {
         x += newOrigin.x;
         y += newOrigin.y;
     }
 
-    double distanceTo(Vector2D other) {
+    public double distanceTo(Vector2D other) {
         double x = other.x - this.x;
         double y = other.y - this.y;
-        return magnitude();
+        return new Vector2D(x, y).magnitude();
+    }
+
+    public Vector2D subtract(Vector2D other) {
+        return new Vector2D(other.x - this.x, other.y - this.y);
+    }
+
+    public int thetaInDegrees() {
+        int result;
+        if (x != 0) {
+            result = (int) Math.toDegrees(Math.atan(y / x));
+            if (result < 0) {
+                result = 180 + result;
+            }
+        } else {
+            if (y > 0) {
+                result = 90;
+            } else {
+                result = 270;
+            }
+        }
+        return result;
     }
 }
 

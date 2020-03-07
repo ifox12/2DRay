@@ -1,10 +1,13 @@
 public class Ray {
     Vector2D base;
     Vector2D direction;
+    // TODO save intersection data here and profit from normalized direction vec
+    int angleToPovDirection;
 
-    Ray(Vector2D base, Vector2D direction) {
+    Ray(Vector2D base, Vector2D direction, int angleToPovDirection) {
         this.base = base;
         this.direction = direction;
+        this.angleToPovDirection = angleToPovDirection;
     }
 
     public Vector2D cast(Obstacle obstacle) {
