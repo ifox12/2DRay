@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
@@ -9,24 +11,26 @@ public class Screen extends JPanel {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 600;
     ArrayList<Obstacle> obstacles = new ArrayList<>();
-    ArrayList<Ray> rays = new ArrayList<>();
-    int povX;
-    int povY;
+    RayCollection rays;
     Vector2D pov;
     Screen3D output3D;
-    ViewerPlane viewerPlane;
+    int povDirectionInDegrees = 0;
+    int mouseX;
+    int mouseY;
+    private Vector2D subtract = new Vector2D(0, 0);
 
     Screen() {
         pov = new Vector2D(50, 200);
 
-        for (int currentAngle = -45; currentAngle < 45; currentAngle++) {
-            rays.add(new Ray(pov, new Vector2D(currentAngle)));
-        }
+        rays = new RayCollection(pov, povDirectionInDegrees);
 
         obstacles.add(new Obstacle(new Point(300, 50), new Point(300, 500)));
         obstacles.add(new Obstacle(new Point(50, 100), new Point(200, 150)));
 
-        viewerPlane = new ViewerPlane(pov, 40, new Vector2D(1, 0));
+        obstacles.add(new Obstacle(new Point(0, 0), new Point(WIDTH, 0)));
+        obstacles.add(new Obstacle(new Point(0, 0), new Point(0, HEIGHT)));
+        obstacles.add(new Obstacle(new Point(WIDTH, HEIGHT), new Point(WIDTH, 0)));
+        obstacles.add(new Obstacle(new Point(WIDTH, HEIGHT), new Point(0, HEIGHT)));
 
         JFrame window = new JFrame("2DRay");
         output3D = new Screen3D();
@@ -40,18 +44,41 @@ public class Screen extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
-                povX = e.getX();
-                povY = e.getY();
-                pov.update(e.getX(), e.getY());
-                viewerPlane.update(pov);
+                mouseX = e.getX();
+                mouseY = e.getY();
+                subtract = pov.subtract(new Vector2D(e.getX(), e.getY()));
+                povDirectionInDegrees = subtract.thetaInDegrees();
+                rays = new RayCollection(pov, povDirectionInDegrees);
                 repaint();
                 output3D.repaint();
             }
         });
 
+        window.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    pov.x -= 10;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    pov.x += 10;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    pov.y += 10;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    pov.y -= 10;
+                }
+                repaint();
+                output3D.repaint();
+            }
+        });
+
+        repaint();
+
         window.requestFocusInWindow();
     }
-    // TODO center slices in the middle of the screen
     // TODO fish eye
     // TODO turning
     // TODO pov greater y than mouse cursor
@@ -69,10 +96,17 @@ public class Screen extends JPanel {
             drawObstacle(g, obstacle);
         }
         fillCircle(g, pov, 10);
-        ArrayList<Integer> distances = new ArrayList<>();
+
+        g.drawString("pov: (" + pov.x + "," + pov.y + ")", 10, 15);
+        g.drawString("pov theta: " + povDirectionInDegrees, 10, 30);
+        g.drawString("ray angles upper: " + rays.upperBound, 10, 45);
+        g.drawString("ray angles lower: " + rays.lowerBound, 10, 60);
+        g.drawString("mouse: (" + mouseX + "," + mouseY + ")", 10, 75);
+        subtract.normalize();
+        g.drawString("direction vector: (" + subtract.x + "," + subtract.y + ")", 10, 90);
 
         int count = 0;
-        for (Ray ray : rays) {
+        for (Ray ray : rays.rays) {
             Vector2D closestIntersection = null;
             double distanceToClosestIntersection = -1;
             for (Obstacle obstacle : obstacles) {
@@ -87,7 +121,8 @@ public class Screen extends JPanel {
             }
             if (closestIntersection != null) {
                 g.drawLine((int) pov.x, (int) pov.y, (int) closestIntersection.x, (int) closestIntersection.y);
-                output3D.distances[count] = (int) distanceToClosestIntersection;
+//                output3D.distances[count] = (int) (distanceToClosestIntersection * Math.cos(Math.toRadians(ray.angleToPovDirection)));
+                output3D.distances[count] = (int) (closestIntersection.x * Math.cos(Math.toRadians(0)) + closestIntersection.y * Math.sin(Math.toRadians(0)));
             } else {
                 output3D.distances[count] = -1;
             }

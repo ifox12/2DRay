@@ -22,23 +22,12 @@ public class Vector2D {
         return x * x + y * y;
     }
 
+    // TODO make this return a new Vector
     public void normalize() {
         double magnitude = magnitude();
         // TODO zero check
         x /= magnitude;
         y /= magnitude;
-    }
-
-    public Vector2D perpendicularClockwise() {
-        return new Vector2D(y, -x);
-    }
-
-    public Vector2D perpendicularCounterclockwise() {
-        return new Vector2D(-y, x);
-    }
-
-    public Vector2D scalarMultiply(int scalar) {
-        return new Vector2D(x * scalar, y * scalar);
     }
 
     public void move(Vector2D newOrigin) {
@@ -52,9 +41,25 @@ public class Vector2D {
         return new Vector2D(x, y).magnitude();
     }
 
-    public void update(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public Vector2D subtract(Vector2D other) {
+        return new Vector2D(other.x - this.x, other.y - this.y);
+    }
+
+    public int thetaInDegrees() {
+        int result;
+        if (x != 0) {
+            result = (int) Math.toDegrees(Math.atan(y / x));
+            if (result < 0) {
+                result = 180 + result;
+            }
+        } else {
+            if (y > 0) {
+                result = 90;
+            } else {
+                result = 270;
+            }
+        }
+        return result;
     }
 }
 
