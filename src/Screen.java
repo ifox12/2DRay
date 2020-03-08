@@ -14,7 +14,7 @@ public class Screen extends JPanel {
     RayCollection rays;
     Vector2D pov;
     Screen3D output3D;
-    int povDirectionInDegrees = 0;
+    Vector2D povDirectionInDegrees;
     int mouseX;
     int mouseY;
     private Vector2D subtract = new Vector2D(0, 0);
@@ -22,6 +22,7 @@ public class Screen extends JPanel {
     Screen() {
         pov = new Vector2D(50, 200);
 
+        povDirectionInDegrees = new Vector2D(0, 1);
         rays = new RayCollection(pov, povDirectionInDegrees);
 
         obstacles.add(new Obstacle(new Point(300, 50), new Point(300, 500)));
@@ -46,9 +47,8 @@ public class Screen extends JPanel {
                 super.mouseMoved(e);
                 mouseX = e.getX();
                 mouseY = e.getY();
-                subtract = pov.subtract(new Vector2D(e.getX(), e.getY()));
-                povDirectionInDegrees = subtract.thetaInDegrees();
-                rays = new RayCollection(pov, povDirectionInDegrees);
+                Vector2D povDirection = pov.subtract(new Vector2D(e.getX(), e.getY()));
+                rays = new RayCollection(pov, povDirection);
                 repaint();
                 output3D.repaint();
             }
